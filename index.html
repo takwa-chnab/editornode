@@ -1,0 +1,87 @@
+<html>
+<title>Realtime Editor/Collaboration</title>
+<script src="node_modules/socket.io-client/dist/socket.io.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <h3>Realtime Editor/Collaboration</h3>
+  <div id="editor">
+  
+
+</div>
+ <div id=hiddendiv ></div>
+ <div id=recievediv ></div>
+<script src="./node_modules/ckeditor/ckeditor.js"></script>
+<script type="text/javascript">
+var socket = io('http://localhost:3000',{transports: ['websocket', 'polling', 'flashsocket']});
+    CKEDITOR.replace( 'editor' );
+	//var editorText = CKEDITOR.instances.editor.getData();
+	function getEl(id) {
+    return document.getElementById(id)
+}
+const editor = getEl('editor')
+const updatedteaxt=getEl('hiddendiv')
+const uret=getEl('recievediv')
+	///editor.addEventListener("keyup", (evt) => {
+    ///var text =CKEDITOR.instances.editor.getData();
+	//timer = setInterval(updateDiv,100);
+    //console.log( timer);
+  // socket.send(updatedteaxt.textContent)
+//})
+
+	//console.log(editorText)
+	//socket.send(editorText)
+	
+  // timer = setInterval(updateDiv,100);
+  // console.log(timer);
+	
+   // function updateDiv(){
+     // var editorText = CKEDITOR.instances.editor.getData();
+     //  $('#trackingDiv').html(editorText);
+		//console.log(editorText)
+	//	console.log(html(editorText))
+	
+  // }
+  CKEDITOR.instances.editor.on('change', function() { 
+	var editorText = CKEDITOR.instances.editor.getData();
+	//var text =CKEDITOR.instances.editor.document.getBody().getText()
+   console.log(editorText);
+//	updatedteaxt.innerHTML=editorText;
+	updatedteaxt.textContent =editorText;
+	//console.log(convertToPlain(editorText));
+	//var strippedHtml = editorText.replace(/<[^>]+>/g, '');
+
+	//var i=$('hiddendiv').html(editorText);
+	//console.log(i.textContent);
+	socket.send(updatedteaxt.textContent)
+	console.log("sent");
+	
+	
+});
+socket.send(updatedteaxt.textContent)
+socket.on('message', (data) => {
+	console.log("recieved");
+		updatedteaxt.textContent=data
+	    uret.innerHTML=data
+		
+
+		//i=data
+		CKEDITOR.instances.editor.setData(uret.innerHTML);
+		console.log("data set in textarea");
+		
+})
+/*console.log(" to be recieved");
+socket.on('message', (data) => {
+	console.log("recieved");
+	var text =CKEDITOR.instances.editor.document.getBody().getText()
+	var text = CKEDITOR.instances.editor.getData();
+
+	console.log("recievedtext :" +text);
+	text=data
+
+
+})*/
+
+</script> 
+</body>
+
+
+</html>
