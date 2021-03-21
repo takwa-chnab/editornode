@@ -40,7 +40,7 @@ const uret=getEl('recievediv')
 	//	console.log(html(editorText))
 	
   // }
-  CKEDITOR.instances.editor.on('change', function() { 
+  CKEDITOR.instances.editor.on("key", function() { 
 	var editorText = CKEDITOR.instances.editor.getData();
 	//var text =CKEDITOR.instances.editor.document.getBody().getText()
    console.log(editorText);
@@ -51,20 +51,20 @@ const uret=getEl('recievediv')
 
 	//var i=$('hiddendiv').html(editorText);
 	//console.log(i.textContent);
-	socket.send(updatedteaxt.textContent)
+	socket.send(editorText)
 	console.log("sent");
 	
 	
 });
-socket.send(updatedteaxt.textContent)
+//socket.send(updatedteaxt.textContent)
 socket.on('message', (data) => {
 	console.log("recieved");
-		updatedteaxt.textContent=data
-	    uret.innerHTML=data
+	//	updatedteaxt.textContent=data
+	  //  uret.innerHTML=data
 		
 
 		//i=data
-		CKEDITOR.instances.editor.setData(uret.innerHTML);
+		CKEDITOR.instances.editor.setData(data);
 		console.log("data set in textarea");
 		
 })
